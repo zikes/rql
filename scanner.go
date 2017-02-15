@@ -124,7 +124,7 @@ func (s *Scanner) scanParenExpression() *ParenExpr {
 	p := &ParenExpr{}
 	for {
 		tok, exp := s.Scan()
-		if tok == COMMA {
+		if tok == COMMA || tok == WS {
 			continue
 		}
 		if tok == RPAREN {
