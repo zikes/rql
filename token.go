@@ -15,6 +15,7 @@ const (
 	NUMERIC // int, float
 	STRING  // "string"
 	BOOLEAN // true, false
+	NULL    // null
 	literal_end
 
 	operator_beg
@@ -46,6 +47,7 @@ var tokens = [...]string{
 	NUMERIC: "NUMERIC",
 	STRING:  "STRING",
 	BOOLEAN: "BOOLEAN",
+	NULL:    "NULL",
 
 	AND: "and",
 	OR:  "or",

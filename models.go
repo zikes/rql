@@ -54,7 +54,7 @@ func (i *Identifier) String() string {
 }
 
 type Literal struct {
-	Kind  Token // NUMERIC, STRING, BOOLEAN
+	Kind  Token // NUMERIC, STRING, BOOLEAN, NULL
 	Value string
 }
 

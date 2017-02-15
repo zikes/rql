@@ -188,6 +188,16 @@ func TestParser_ParseStatement(t *testing.T) {
 		},
 	}
 
+	exp_null := &rql.Operator{
+		Name: "eq",
+		Operands: &rql.ParenExpr{
+			[]rql.Expression{
+				&rql.Identifier{Name: "my_col"},
+				&rql.Literal{Kind: rql.NULL, Value: "null"},
+			},
+		},
+	}
+
 	var tests = []struct {
 		s    string
 		stmt *rql.Statement
@@ -244,6 +254,10 @@ func TestParser_ParseStatement(t *testing.T) {
 		{
 			s:    `in(primes,(1,2,3,5,7))`,
 			stmt: &rql.Statement{[]rql.Expression{exp_in}},
+		},
+		{
+			s:    `eq(my_col,null)`,
+			stmt: &rql.Statement{[]rql.Expression{exp_null}},
 		},
 	}
 

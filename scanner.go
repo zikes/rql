@@ -116,6 +116,8 @@ func (s *Scanner) scanIdentifier() (Token, Expression) {
 	switch strings.ToLower(str) {
 	case "true", "false":
 		return BOOLEAN, &Literal{Kind: BOOLEAN, Value: strings.ToLower(str)}
+	case "null":
+		return NULL, &Literal{Kind: NULL, Value: strings.ToLower(str)}
 	}
 
 	return IDENT, &Identifier{str}
