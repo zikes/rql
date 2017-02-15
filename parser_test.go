@@ -232,7 +232,7 @@ func TestParser_ParseStatement(t *testing.T) {
 		fmt.Printf("  %d %s = %s\n", i, stmt.String(), tt.s)
 		if !reflect.DeepEqual(tt.err, errstring(err)) {
 			t.Errorf("  %d. %q: error mismatch:\n    exp=%s\n    got=%s\n\n", i, tt.s, tt.err, err)
-		} else if tt.err == "" && !reflect.DeepEqual(tt.stmt.String(), stmt.String()) {
+		} else if tt.err == "" && !reflect.DeepEqual(tt.stmt, stmt) {
 			t.Errorf("  %d. %q\n\nstmt mismatch:\n    exp=%s\n    got=%s\n\n", i, tt.s, tt.stmt, stmt)
 		}
 	}
