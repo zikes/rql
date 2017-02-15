@@ -170,6 +170,24 @@ func TestParser_ParseStatement(t *testing.T) {
 		},
 	}
 
+	exp_in := &rql.Operator{
+		Name: "in",
+		Operands: &rql.ParenExpr{
+			[]rql.Expression{
+				&rql.Identifier{Name: "primes"},
+				&rql.ParenExpr{
+					[]rql.Expression{
+						&rql.Literal{Kind: rql.NUMERIC, Value: "1"},
+						&rql.Literal{Kind: rql.NUMERIC, Value: "2"},
+						&rql.Literal{Kind: rql.NUMERIC, Value: "3"},
+						&rql.Literal{Kind: rql.NUMERIC, Value: "5"},
+						&rql.Literal{Kind: rql.NUMERIC, Value: "7"},
+					},
+				},
+			},
+		},
+	}
+
 	var tests = []struct {
 		s    string
 		stmt *rql.Statement
@@ -222,6 +240,10 @@ func TestParser_ParseStatement(t *testing.T) {
 		{
 			s:    `not(and(eq(column,12),ne(my_col,-12)))`,
 			stmt: &rql.Statement{[]rql.Expression{exp_not}},
+		},
+		{
+			s:    `in(primes,(1,2,3,5,7))`,
+			stmt: &rql.Statement{[]rql.Expression{exp_in}},
 		},
 	}
 

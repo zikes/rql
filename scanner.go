@@ -130,6 +130,9 @@ func (s *Scanner) scanParenExpression() *ParenExpr {
 		if tok == RPAREN {
 			break
 		}
+		if tok == LPAREN {
+			exp = s.scanParenExpression()
+		}
 		p.Expressions = append(p.Expressions, exp)
 	}
 	return p
