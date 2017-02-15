@@ -3,11 +3,14 @@
 // http://jeremy.marzhillstudios.com/entries/Using-bufioScanner-to-build-a-Tokenizer/
 package rql
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 type Expression interface {
 	exprNode()
-	String() string
+	fmt.Stringer
 }
 type ExpressionList []Expression
 
