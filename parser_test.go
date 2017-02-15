@@ -180,6 +180,10 @@ func TestParser_ParseStatement(t *testing.T) {
 			stmt: &rql.Statement{[]rql.Expression{exp_equal_int}},
 		},
 		{
+			s:    "eq(column, 12)",
+			stmt: &rql.Statement{[]rql.Expression{exp_equal_int}},
+		},
+		{
 			s:    "ne(my_col,-12)",
 			stmt: &rql.Statement{[]rql.Expression{exp_nequal_int}},
 		},
