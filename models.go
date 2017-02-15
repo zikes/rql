@@ -17,6 +17,9 @@ type ExpressionList []Expression
 func (e *ExpressionList) String() []string {
 	out := []string{}
 	for _, v := range *e {
+		if _, ok := v.(*Whitespace); ok {
+			continue
+		}
 		out = append(out, v.String())
 	}
 	return out
