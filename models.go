@@ -87,5 +87,8 @@ type Statement struct {
 }
 
 func (s *Statement) String() string {
+	if s == nil {
+		return ""
+	}
 	return strings.Join(s.Expressions.String(), "")
 }
