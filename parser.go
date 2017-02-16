@@ -12,10 +12,16 @@ type Parser struct {
 		lit Expression // last read expression
 		n   int        // buffer size (max = 1)
 	}
+	IgnoreWhitespace bool
 }
 
 func NewParser(r io.Reader) *Parser {
-	return &Parser{s: NewScanner(r)}
+	return &Parser{s: NewScanner(r), IgnoreWhitespace: true}
+}
+
+func (p *Parser) Whitespace(b bool) *Parser {
+	p.IgnoreWhitespace = !b
+	return p
 }
 
 func (p *Parser) scan() (Token, Expression) {
@@ -33,20 +39,15 @@ func (p *Parser) scan() (Token, Expression) {
 
 func (p *Parser) unscan() { p.buf.n = 1 }
 
-func (p *Parser) scanIgnoreWhitespace() (Token, Expression) {
-	tok, lit := p.scan()
-	if tok == WS {
-		tok, lit = p.scan()
-	}
-	return tok, lit
-}
-
 func (p *Parser) Parse() (*Statement, error) {
 	stmt := &Statement{}
 	for {
-		tok, exp := p.scanIgnoreWhitespace()
+		tok, exp := p.scan()
 		if tok == EOF {
 			break
+		}
+		if tok == WS && p.IgnoreWhitespace {
+			continue
 		}
 
 		if !tok.IsOperator() {
