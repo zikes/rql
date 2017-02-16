@@ -42,6 +42,7 @@ const (
 var tokens = [...]string{
 	ILLEGAL: "ILLEGAL",
 	EOF:     "EOF",
+	WS:      "WS",
 
 	IDENT:   "IDENT",
 	NUMERIC: "NUMERIC",
