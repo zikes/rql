@@ -80,6 +80,9 @@ func (tok Token) String() string {
 func (tok Token) IsLiteral() bool     { return literal_beg < tok && tok < literal_end }
 func (tok Token) IsOperator() bool    { return operator_beg < tok && tok < operator_end }
 func (tok Token) IsPunctuation() bool { return punctuation_beg < tok && tok < punctuation_end }
+func (tok Token) IsWhitespace() bool  { return tok == WS }
+func (tok Token) IsEOF() bool         { return tok == EOF }
+func (tok Token) IsIllegal() bool     { return tok == ILLEGAL }
 
 func LookupOperator(s string) Token {
 	for i := operator_beg + 1; i < operator_end; i++ {
