@@ -45,4 +45,4 @@ In SQL, the above would be
 
 | name           | usage                 | description                                                    |
 |----------------|-----------------------|----------------------------------------------------------------|
-| ExpressionList | `(val,val,val,[...])  | Collects a list of values and presents them as a single value. |
+| ExpressionList | `(val,val,val,[...])` | Collects a list of values and presents them as a single value. |
