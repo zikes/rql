@@ -33,4 +33,16 @@ In SQL, the above would be
 
 ## Literals
 
+| name       | usage                 | description                        |
+|------------|-----------------------|------------------------------------|
+| string     | `eq(value, "string")` | String literal data type.          |
+| numeric    | `neq(value, -12.123)` | Numeric literal data type.         |
+| boolean    | `and(value, true)`    | Boolean literal data type.         |
+| null       | `or(value, null)`     | Null literal data type.            |
+| identifier | `not(my_col)`         | Identifier literal data type.      |
+
 ## Arrays
+
+| name           | usage                 | description                                                    |
+|----------------|-----------------------|----------------------------------------------------------------|
+| ExpressionList | `(val,val,val,[...])  | Collects a list of values and presents them as a single value. |
