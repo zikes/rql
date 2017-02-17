@@ -1,10 +1,6 @@
 package rql
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "fmt"
 
 type Parser struct {
 	s   *Scanner
@@ -12,14 +8,6 @@ type Parser struct {
 		lit Expression // last read expression
 		n   int        // buffer size (max = 1)
 	}
-}
-
-func NewParser(r io.Reader) *Parser {
-	return &Parser{s: NewScanner(r)}
-}
-
-func ParseString(s string) (Statement, error) {
-	return NewParser(strings.NewReader(s)).Parse()
 }
 
 func (p *Parser) scan() Expression {
