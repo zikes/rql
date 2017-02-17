@@ -3,6 +3,7 @@ package rql
 import (
 	"fmt"
 	"io"
+	"strings"
 )
 
 type Parser struct {
@@ -15,6 +16,10 @@ type Parser struct {
 
 func NewParser(r io.Reader) *Parser {
 	return &Parser{s: NewScanner(r)}
+}
+
+func ParseString(s string) (Statement, error) {
+	return NewParser(strings.NewReader(s)).Parse()
 }
 
 func (p *Parser) scan() Expression {
