@@ -19,6 +19,8 @@ func Array(e ...interface{}) (ExpressionList, error) {
 	out := ExpressionList{}
 	for _, v := range e {
 		switch v := v.(type) {
+		case nil:
+			out = append(out, Literal{Kind: NULL, Value: "null"})
 		case string:
 			out = append(out, Literal{Kind: STRING, Value: v})
 		case int:
