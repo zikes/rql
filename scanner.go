@@ -102,13 +102,6 @@ func (s *Scanner) scanIdentifier() Expression {
 
 	opToken := LookupOperator(strings.ToLower(str))
 	if opToken > 0 {
-		/*
-			if ch := s.read(true); ch != rune(tokens[LPAREN][0]) {
-				s.unread()
-				return ILLEGAL, &Identifier{string(ch)}
-			}
-			p := s.scanParenExpression()
-		*/
 		return &Operator{Kind: opToken, Name: str}
 	}
 
@@ -121,26 +114,6 @@ func (s *Scanner) scanIdentifier() Expression {
 
 	return &Identifier{IDENT, str}
 }
-
-/*
-func (s *Scanner) scanParenExpression() *ParenExpr {
-	p := &ParenExpr{}
-	for {
-		tok, exp := s.Scan()
-		if tok == COMMA || tok == WS {
-			continue
-		}
-		if tok == RPAREN {
-			break
-		}
-		if tok == LPAREN {
-			exp = s.scanParenExpression()
-		}
-		p.Expressions = append(p.Expressions, exp)
-	}
-	return p
-}
-*/
 
 func (s *Scanner) scanStringLiteral() *Literal {
 	var buf bytes.Buffer
