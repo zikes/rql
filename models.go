@@ -19,7 +19,7 @@ func (e ExpressionList) exprNode() {}
 func (e ExpressionList) String() string {
 	out := []string{}
 	for _, v := range e {
-		if _, ok := v.(*Whitespace); ok {
+		if _, ok := v.(Whitespace); ok {
 			continue
 		}
 		out = append(out, v.String())
@@ -36,11 +36,11 @@ type Operator struct {
 	Operands ExpressionList
 }
 
-func (*Operator) exprNode() {}
-func (o *Operator) String() string {
+func (Operator) exprNode() {}
+func (o Operator) String() string {
 	return o.Name + o.Operands.String()
 }
-func (o *Operator) Token() Token {
+func (o Operator) Token() Token {
 	return o.Kind
 }
 
@@ -49,11 +49,11 @@ type Identifier struct {
 	Name string
 }
 
-func (*Identifier) exprNode() {}
-func (i *Identifier) String() string {
+func (Identifier) exprNode() {}
+func (i Identifier) String() string {
 	return i.Name
 }
-func (i *Identifier) Token() Token {
+func (i Identifier) Token() Token {
 	return i.Kind
 }
 
@@ -62,11 +62,11 @@ type Illegal struct {
 	Value string
 }
 
-func (*Illegal) exprNode() {}
-func (i *Illegal) String() string {
+func (Illegal) exprNode() {}
+func (i Illegal) String() string {
 	return i.Value
 }
-func (i *Illegal) Token() Token {
+func (i Illegal) Token() Token {
 	return i.Kind
 }
 
@@ -75,11 +75,11 @@ type Literal struct {
 	Value string
 }
 
-func (*Literal) exprNode() {}
-func (l *Literal) String() string {
+func (Literal) exprNode() {}
+func (l Literal) String() string {
 	return l.Value
 }
-func (l *Literal) Token() Token {
+func (l Literal) Token() Token {
 	return l.Kind
 }
 
@@ -88,11 +88,11 @@ type Punctuation struct {
 	Value string // ",", "(", ")"
 }
 
-func (*Punctuation) exprNode() {}
-func (p *Punctuation) String() string {
+func (Punctuation) exprNode() {}
+func (p Punctuation) String() string {
 	return p.Value
 }
-func (p *Punctuation) Token() Token {
+func (p Punctuation) Token() Token {
 	return p.Kind
 }
 
@@ -101,11 +101,11 @@ type Whitespace struct {
 	Value string
 }
 
-func (*Whitespace) exprNode() {}
-func (w *Whitespace) String() string {
+func (Whitespace) exprNode() {}
+func (w Whitespace) String() string {
 	return w.Value
 }
-func (w *Whitespace) Token() Token {
+func (w Whitespace) Token() Token {
 	return w.Kind
 }
 
@@ -114,7 +114,7 @@ type Statement ExpressionList
 func (s Statement) String() string {
 	out := []string{}
 	for _, v := range s {
-		if _, ok := v.(*Whitespace); ok {
+		if _, ok := v.(Whitespace); ok {
 			continue
 		}
 		out = append(out, v.String())
