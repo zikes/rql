@@ -9,7 +9,7 @@ import (
 	"git.nwaonline.com/rune/rql"
 )
 
-func TestExpressions_String(t *testing.T) {
+func TestExpressions(t *testing.T) {
 	var tests = []struct {
 		s string
 		e rql.Expression
@@ -27,8 +27,8 @@ func TestExpressions_String(t *testing.T) {
 		{"false", &rql.Literal{rql.BOOLEAN, "false"}},
 
 		// Identifiers
-		{"col", &rql.Identifier{Name: "col"}},
-		{"col_2", &rql.Identifier{Name: "col_2"}},
+		{"col", &rql.Identifier{Kind: rql.IDENT, Name: "col"}},
+		{"col_2", &rql.Identifier{Kind: rql.IDENT, Name: "col_2"}},
 	}
 
 	fmt.Printf("Testing Expression.String()\n")
@@ -42,96 +42,71 @@ func TestExpressions_String(t *testing.T) {
 	}
 }
 
-func TestParser_ParseStatement_Whitespace(t *testing.T) {
-	var tests = []struct {
-		s    string
-		stmt *rql.Statement
-		err  string
-	}{
-		{
-			s: `	eq (
-				my_col,
-				null
-			)`,
-			stmt: &rql.Statement{[]rql.Expression{exp_null}},
-		},
-		{
-			s:    "eq(column, 12)",
-			stmt: &rql.Statement{[]rql.Expression{exp_equal_int}},
-		},
-	}
-
-	fmt.Printf("Testing Parser - Whitespace\n")
-
-	for i, tt := range tests {
-		stmt, err := rql.NewParser(strings.NewReader(tt.s)).Parse()
-		fmt.Printf("  %d %s = %s\n", i, stmt.String(), tt.s)
-		if !reflect.DeepEqual(tt.err, errstring(err)) {
-			t.Errorf("  %d. %q: error mismatch:\n    exp=%s\n    got=%s\n\n", i, tt.s, tt.err, err)
-		} else if tt.err == "" && !reflect.DeepEqual(tt.stmt, stmt) {
-			t.Errorf("  %d. %q\n\nstmt mismatch:\n    exp=%s\n    got=%s\n\n", i, tt.s, tt.stmt, stmt)
-		}
-	}
-
-}
-
 func TestParser_ParseStatement(t *testing.T) {
 	var tests = []struct {
 		s    string
-		stmt *rql.Statement
+		stmt rql.Statement
 		err  string
 	}{
 		{
+			s:    "\teq (\n\tmy_col,\n\tnull\n)",
+			stmt: rql.Statement{exp_null},
+		},
+		{
 			s:    "eq(column,12)",
-			stmt: &rql.Statement{[]rql.Expression{exp_equal_int}},
+			stmt: rql.Statement{exp_equal_int},
 		},
 		{
 			s:    "ne(my_col,-12)",
-			stmt: &rql.Statement{[]rql.Expression{exp_nequal_int}},
+			stmt: rql.Statement{exp_nequal_int},
 		},
 		{
 			s:    `eq(my_col,"this is a test")`,
-			stmt: &rql.Statement{[]rql.Expression{exp_equal_string}},
+			stmt: rql.Statement{exp_equal_string},
 		},
 		{
 			s:    `eq(my_col,true)`,
-			stmt: &rql.Statement{[]rql.Expression{exp_equal_boolean}},
+			stmt: rql.Statement{exp_equal_boolean},
 		},
 		{
 			s:    `eq(my_col,my_other_col)`,
-			stmt: &rql.Statement{[]rql.Expression{exp_equal_identifier}},
+			stmt: rql.Statement{exp_equal_identifier},
 		},
 		{
 			s:    `eq(my_col,12.123)`,
-			stmt: &rql.Statement{[]rql.Expression{exp_equal_float}},
+			stmt: rql.Statement{exp_equal_float},
 		},
 		{
 			s:    `eq(my_col,-12.123)`,
-			stmt: &rql.Statement{[]rql.Expression{exp_equal_negative_float}},
+			stmt: rql.Statement{exp_equal_negative_float},
 		},
 		{
 			s:    `and(eq(column,12),ne(my_col,-12))`,
-			stmt: &rql.Statement{[]rql.Expression{exp_and}},
+			stmt: rql.Statement{exp_and},
 		},
 		{
 			s:    `or(eq(column,12),ne(my_col,-12))`,
-			stmt: &rql.Statement{[]rql.Expression{exp_or}},
+			stmt: rql.Statement{exp_or},
 		},
 		{
 			s:    `and(eq(column,12),eq(my_col,"this is a test"),eq(my_col,12.123),and(eq(column,12),ne(my_col,-12)),or(eq(column,12),ne(my_col,-12)))`,
-			stmt: &rql.Statement{[]rql.Expression{exp_many_nested}},
+			stmt: rql.Statement{exp_many_nested},
 		},
 		{
 			s:    `not(and(eq(column,12),ne(my_col,-12)))`,
-			stmt: &rql.Statement{[]rql.Expression{exp_not}},
+			stmt: rql.Statement{exp_not},
 		},
 		{
 			s:    `in(primes,(1,2,3,5,7))`,
-			stmt: &rql.Statement{[]rql.Expression{exp_in}},
+			stmt: rql.Statement{exp_in},
 		},
 		{
 			s:    `eq(my_col,null)`,
-			stmt: &rql.Statement{[]rql.Expression{exp_null}},
+			stmt: rql.Statement{exp_null},
+		},
+		{
+			s:    `eq(col,"a string with \"quotes\" in it")`,
+			stmt: rql.Statement{exp_quoted_string},
 		},
 	}
 
@@ -139,7 +114,7 @@ func TestParser_ParseStatement(t *testing.T) {
 
 	for i, tt := range tests {
 		stmt, err := rql.NewParser(strings.NewReader(tt.s)).Parse()
-		fmt.Printf("  %d %s = %s\n", i, stmt.String(), tt.s)
+		fmt.Printf("  %d %q\n", i, tt.s)
 		if !reflect.DeepEqual(tt.err, errstring(err)) {
 			t.Errorf("  %d. %q: error mismatch:\n    exp=%s\n    got=%s\n\n", i, tt.s, tt.err, err)
 		} else if tt.err == "" && !reflect.DeepEqual(tt.stmt, stmt) {

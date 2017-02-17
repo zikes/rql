@@ -18,18 +18,21 @@ func NewScanner(r io.Reader) *Scanner {
 	return &Scanner{r: bufio.NewReader(r)}
 }
 
-func (s *Scanner) read() rune {
+func (s *Scanner) read(skipWhitespace bool) rune {
 	ch, _, err := s.r.ReadRune()
 	if err != nil {
 		return eof
+	}
+	if skipWhitespace && unicode.IsSpace(ch) {
+		return s.read(skipWhitespace)
 	}
 	return ch
 }
 
 func (s *Scanner) unread() { s.r.UnreadRune() }
 
-func (s *Scanner) Scan() (Token, Expression) {
-	c := s.read()
+func (s *Scanner) Scan() Expression {
+	c := s.read(false)
 
 	if unicode.IsSpace(c) {
 		s.unread()
@@ -53,24 +56,23 @@ func (s *Scanner) Scan() (Token, Expression) {
 
 	switch c {
 	case eof:
-		return EOF, nil
+		return nil
 	case rune(tokens[COMMA][0]):
-		return COMMA, &Punctuation{COMMA, tokens[COMMA]}
+		return &Punctuation{COMMA, tokens[COMMA]}
 	case rune(tokens[LPAREN][0]):
-		return LPAREN, &Punctuation{LPAREN, tokens[LPAREN]}
+		return &Punctuation{LPAREN, tokens[LPAREN]}
 	case rune(tokens[RPAREN][0]):
-		return RPAREN, &Punctuation{RPAREN, tokens[RPAREN]}
+		return &Punctuation{RPAREN, tokens[RPAREN]}
 	}
 
-	return ILLEGAL, &Identifier{string(c)}
+	return &Illegal{ILLEGAL, string(c)}
 }
 
-func (s *Scanner) scanWhitespace() (Token, *Whitespace) {
+func (s *Scanner) scanWhitespace() *Whitespace {
 	var buf bytes.Buffer
-	buf.WriteRune(s.read())
 
 	for {
-		if c := s.read(); c == eof {
+		if c := s.read(false); c == eof {
 			break
 		} else if !unicode.IsSpace(c) {
 			s.unread()
@@ -80,14 +82,13 @@ func (s *Scanner) scanWhitespace() (Token, *Whitespace) {
 		}
 	}
 
-	return WS, &Whitespace{buf.String()}
+	return &Whitespace{WS, buf.String()}
 }
-func (s *Scanner) scanIdentifier() (Token, Expression) {
+func (s *Scanner) scanIdentifier() Expression {
 	var buf bytes.Buffer
-	buf.WriteRune(s.read())
 
 	for {
-		if c := s.read(); c == eof {
+		if c := s.read(true); c == eof {
 			break
 		} else if !unicode.IsLetter(c) && c != '_' && !unicode.IsDigit(c) {
 			s.unread()
@@ -101,27 +102,27 @@ func (s *Scanner) scanIdentifier() (Token, Expression) {
 
 	opToken := LookupOperator(strings.ToLower(str))
 	if opToken > 0 {
-		if ch := s.read(); ch != rune(tokens[LPAREN][0]) {
-			s.unread()
-			return ILLEGAL, &Identifier{string(ch)}
-		}
-		p := s.scanParenExpression()
-		o := &Operator{
-			Name:     str,
-			Operands: p,
-		}
-		return opToken, o
+		/*
+			if ch := s.read(true); ch != rune(tokens[LPAREN][0]) {
+				s.unread()
+				return ILLEGAL, &Identifier{string(ch)}
+			}
+			p := s.scanParenExpression()
+		*/
+		return &Operator{Kind: opToken, Name: str}
 	}
 
 	switch strings.ToLower(str) {
 	case "true", "false":
-		return BOOLEAN, &Literal{Kind: BOOLEAN, Value: strings.ToLower(str)}
+		return &Literal{Kind: BOOLEAN, Value: strings.ToLower(str)}
 	case "null":
-		return NULL, &Literal{Kind: NULL, Value: strings.ToLower(str)}
+		return &Literal{Kind: NULL, Value: strings.ToLower(str)}
 	}
 
-	return IDENT, &Identifier{str}
+	return &Identifier{IDENT, str}
 }
+
+/*
 func (s *Scanner) scanParenExpression() *ParenExpr {
 	p := &ParenExpr{}
 	for {
@@ -139,19 +140,21 @@ func (s *Scanner) scanParenExpression() *ParenExpr {
 	}
 	return p
 }
+*/
 
-func (s *Scanner) scanStringLiteral() (Token, *Literal) {
+func (s *Scanner) scanStringLiteral() *Literal {
 	var buf bytes.Buffer
-	delim := s.read()
+	delim := s.read(false)
 	buf.WriteRune(delim)
 
 	skip := false
 
 	for {
-		if c := s.read(); c == eof {
+		if c := s.read(false); c == eof {
 			break
 		} else if skip {
 			skip = false
+			buf.WriteRune(c)
 			continue
 		} else if c == '\\' {
 			skip = true
@@ -164,14 +167,13 @@ func (s *Scanner) scanStringLiteral() (Token, *Literal) {
 		}
 	}
 
-	return STRING, &Literal{STRING, buf.String()}
+	return &Literal{STRING, buf.String()}
 }
-func (s *Scanner) scanNumericLiteral() (Token, *Literal) {
+func (s *Scanner) scanNumericLiteral() *Literal {
 	var buf bytes.Buffer
-	buf.WriteRune(s.read())
 
 	for {
-		if c := s.read(); c == eof {
+		if c := s.read(true); c == eof {
 			break
 		} else if !unicode.IsDigit(c) && c != '-' && c != '.' {
 			s.unread()
@@ -181,5 +183,5 @@ func (s *Scanner) scanNumericLiteral() (Token, *Literal) {
 		}
 	}
 
-	return NUMERIC, &Literal{NUMERIC, buf.String()}
+	return &Literal{NUMERIC, buf.String()}
 }
