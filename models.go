@@ -57,19 +57,6 @@ func (i Identifier) Token() Token {
 	return i.Kind
 }
 
-type Illegal struct {
-	Kind  Token // ILLEGAL
-	Value string
-}
-
-func (Illegal) exprNode() {}
-func (i Illegal) String() string {
-	return i.Value
-}
-func (i Illegal) Token() Token {
-	return i.Kind
-}
-
 type Literal struct {
 	Kind  Token // NUMERIC, STRING, BOOLEAN, NULL
 	Value string

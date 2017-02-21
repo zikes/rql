@@ -65,7 +65,7 @@ func (s *Scanner) Scan() Expression {
 		return &Punctuation{RPAREN, tokens[RPAREN]}
 	}
 
-	return &Illegal{ILLEGAL, string(c)}
+	return &Literal{ILLEGAL, string(c)}
 }
 
 func (s *Scanner) scanWhitespace() *Whitespace {
