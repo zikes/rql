@@ -5,6 +5,7 @@ package rql
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -86,6 +87,26 @@ func (l Literal) String() string {
 }
 func (l Literal) Token() Token {
 	return l.Kind
+}
+func (l Literal) IntValue() int {
+	i, err := strconv.Atoi(l.Value)
+	if err != nil {
+		return 0
+	}
+	return i
+}
+func (l Literal) StringValue() string {
+	return l.Value
+}
+func (l Literal) BoolValue() bool {
+	return l.Value == "true"
+}
+func (l Literal) FloatValue() float64 {
+	f, err := strconv.ParseFloat(l.Value, 64)
+	if err != nil {
+		return 0
+	}
+	return f
 }
 
 type Punctuation struct {
