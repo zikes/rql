@@ -46,64 +46,64 @@ func Lit(i interface{}) Literal {
 
 // Operators
 
-func And(e ...Expression) Expression {
+func And(e ...interface{}) Expression {
 	return Operator{
 		Kind:     AND,
-		Operands: ExpressionList(e),
+		Operands: Array(e...),
 	}
 }
-func Or(e ...Expression) Expression {
+func Or(e ...interface{}) Expression {
 	return Operator{
 		Kind:     OR,
-		Operands: ExpressionList(e),
+		Operands: Array(e...),
 	}
 }
-func Not(e ...Expression) Expression {
+func Not(e ...interface{}) Expression {
 	return Operator{
 		Kind:     NOT,
-		Operands: ExpressionList(e),
+		Operands: Array(e...),
 	}
 }
-func Lt(e ...Expression) Expression {
+func Lt(e ...interface{}) Expression {
 	return Operator{
 		Kind:     LT,
-		Operands: ExpressionList(e),
+		Operands: Array(e...),
 	}
 }
-func Gt(e ...Expression) Expression {
+func Gt(e ...interface{}) Expression {
 	return Operator{
 		Kind:     GT,
-		Operands: ExpressionList(e),
+		Operands: Array(e...),
 	}
 }
-func Le(e ...Expression) Expression {
+func Le(e ...interface{}) Expression {
 	return Operator{
 		Kind:     LE,
-		Operands: ExpressionList(e),
+		Operands: Array(e...),
 	}
 }
-func Ge(e ...Expression) Expression {
+func Ge(e ...interface{}) Expression {
 	return Operator{
 		Kind:     GE,
-		Operands: ExpressionList(e),
+		Operands: Array(e...),
 	}
 }
-func Eq(e ...Expression) Expression {
+func Eq(e ...interface{}) Expression {
 	return Operator{
 		Kind:     EQ,
-		Operands: ExpressionList(e),
+		Operands: Array(e...),
 	}
 }
-func Ne(e ...Expression) Expression {
+func Ne(e ...interface{}) Expression {
 	return Operator{
 		Kind:     NE,
-		Operands: ExpressionList(e),
+		Operands: Array(e...),
 	}
 }
-func In(e ...Expression) Expression {
+func In(e ...interface{}) Expression {
 	return Operator{
 		Kind:     IN,
-		Operands: ExpressionList(e),
+		Operands: Array(e...),
 	}
 }
 
