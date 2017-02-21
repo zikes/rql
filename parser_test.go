@@ -176,7 +176,6 @@ func TestExpressions_String(t *testing.T) {
 
 	for i, tt := range tests {
 		got := tt.e.String()
-		fmt.Printf("  %d %s = %s\n", i, tt.s, got)
 		if tt.s != got {
 			t.Errorf("  %d. string mismatch:\n  exp=%s\n  got=%s\n\n", i, tt.s, got)
 		}
@@ -255,7 +254,6 @@ func TestParser_ParseStatement(t *testing.T) {
 
 	for i, tt := range tests {
 		stmt, err := rql.NewParser(strings.NewReader(tt.s)).Parse()
-		fmt.Printf("  %d %q\n", i, tt.s)
 		if !reflect.DeepEqual(tt.err, errstring(err)) {
 			t.Errorf("  %d. %q: error mismatch:\n    exp=%s\n    got=%s\n\n", i, tt.s, tt.err, err)
 		} else if tt.err == "" && !reflect.DeepEqual(tt.stmt, stmt) {
