@@ -32,13 +32,12 @@ func (e ExpressionList) Token() Token {
 
 type Operator struct {
 	Kind     Token // AND, OR, NOT, LT, GT, LE, GE, EQ, NE, IN
-	Name     string
 	Operands ExpressionList
 }
 
 func (Operator) exprNode() {}
 func (o Operator) String() string {
-	return o.Name + o.Operands.String()
+	return o.Kind.String() + o.Operands.String()
 }
 func (o Operator) Token() Token {
 	return o.Kind

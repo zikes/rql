@@ -102,7 +102,7 @@ func (s *Scanner) scanIdentifier() Expression {
 
 	opToken := LookupOperator(strings.ToLower(str))
 	if opToken > 0 {
-		return &Operator{Kind: opToken, Name: str}
+		return &Operator{Kind: opToken}
 	}
 
 	switch strings.ToLower(str) {
