@@ -138,6 +138,19 @@ func TestExpressions_String(t *testing.T) {
 
 		// Operators
 		{"and()", rql.Operator{Kind: rql.AND}},
+		{"and(id,eq(col,12))", rql.Operator{
+			Kind: rql.AND,
+			Operands: rql.ExpressionList{
+				rql.Identifier{Kind: rql.IDENT, Name: "id"},
+				rql.Operator{
+					Kind: rql.EQ,
+					Operands: rql.ExpressionList{
+						rql.Identifier{Kind: rql.IDENT, Name: "col"},
+						rql.Literal{rql.NUMERIC, "12"},
+					},
+				},
+			},
+		}},
 		{"or()", rql.Operator{Kind: rql.OR}},
 		{"not()", rql.Operator{Kind: rql.NOT}},
 		{"lt()", rql.Operator{Kind: rql.LT}},
