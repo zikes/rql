@@ -57,7 +57,7 @@ var tokens = [...]string{
 	AND: "and",
 	OR:  "or",
 	NOT: "not",
-	LT:  "le",
+	LT:  "lt",
 	GT:  "gt",
 	LE:  "le",
 	GE:  "ge",
