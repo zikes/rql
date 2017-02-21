@@ -116,16 +116,12 @@ func Array(e ...interface{}) ExpressionList {
 	out := ExpressionList{}
 
 	for _, v := range e {
-		lit := Lit(v)
-		if lit.Token() == ILLEGAL {
-			out = append(out, lit)
-			continue
-		}
 		switch v := v.(type) {
 		case Expression:
 			out = append(out, v)
 		default:
 			// unknown type
+			lit := Lit(v)
 			out = append(out, lit)
 		}
 	}
