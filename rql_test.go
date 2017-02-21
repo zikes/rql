@@ -30,7 +30,7 @@ var exp_equal_string = &rql.Operator{
 		&rql.Identifier{Kind: rql.IDENT, Name: "my_col"},
 		&rql.Literal{
 			Kind:  rql.STRING,
-			Value: `"this is a test"`,
+			Value: `this is a test`,
 		},
 	},
 }
@@ -136,6 +136,6 @@ var exp_quoted_string = &rql.Operator{
 	Kind: rql.EQ,
 	Operands: rql.ExpressionList{
 		&rql.Identifier{Kind: rql.IDENT, Name: "col"},
-		&rql.Literal{Kind: rql.STRING, Value: `"a string with "quotes" in it"`},
+		&rql.Literal{Kind: rql.STRING, Value: `a string with "quotes" in it`},
 	},
 }
