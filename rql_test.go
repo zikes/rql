@@ -4,7 +4,6 @@ import "git.nwaonline.com/rune/rql"
 
 var exp_equal_int = &rql.Operator{
 	Kind: rql.EQ,
-	Name: "eq",
 	Operands: rql.ExpressionList{
 		&rql.Identifier{Kind: rql.IDENT, Name: "column"},
 		&rql.Literal{
@@ -16,7 +15,6 @@ var exp_equal_int = &rql.Operator{
 
 var exp_nequal_int = &rql.Operator{
 	Kind: rql.NE,
-	Name: "ne",
 	Operands: rql.ExpressionList{
 		&rql.Identifier{Kind: rql.IDENT, Name: "my_col"},
 		&rql.Literal{
@@ -28,7 +26,6 @@ var exp_nequal_int = &rql.Operator{
 
 var exp_equal_string = &rql.Operator{
 	Kind: rql.EQ,
-	Name: "eq",
 	Operands: rql.ExpressionList{
 		&rql.Identifier{Kind: rql.IDENT, Name: "my_col"},
 		&rql.Literal{
@@ -40,7 +37,6 @@ var exp_equal_string = &rql.Operator{
 
 var exp_equal_boolean = &rql.Operator{
 	Kind: rql.EQ,
-	Name: "eq",
 	Operands: rql.ExpressionList{
 		&rql.Identifier{Kind: rql.IDENT, Name: "my_col"},
 		&rql.Literal{
@@ -52,7 +48,6 @@ var exp_equal_boolean = &rql.Operator{
 
 var exp_equal_identifier = &rql.Operator{
 	Kind: rql.EQ,
-	Name: "eq",
 	Operands: rql.ExpressionList{
 		&rql.Identifier{Kind: rql.IDENT, Name: "my_col"},
 		&rql.Identifier{Kind: rql.IDENT, Name: "my_other_col"},
@@ -61,7 +56,6 @@ var exp_equal_identifier = &rql.Operator{
 
 var exp_equal_float = &rql.Operator{
 	Kind: rql.EQ,
-	Name: "eq",
 	Operands: rql.ExpressionList{
 		&rql.Identifier{Kind: rql.IDENT, Name: "my_col"},
 		&rql.Literal{
@@ -73,7 +67,6 @@ var exp_equal_float = &rql.Operator{
 
 var exp_equal_negative_float = &rql.Operator{
 	Kind: rql.EQ,
-	Name: "eq",
 	Operands: rql.ExpressionList{
 		&rql.Identifier{Kind: rql.IDENT, Name: "my_col"},
 		&rql.Literal{
@@ -85,7 +78,6 @@ var exp_equal_negative_float = &rql.Operator{
 
 var exp_and = &rql.Operator{
 	Kind: rql.AND,
-	Name: "and",
 	Operands: rql.ExpressionList{
 		exp_equal_int,
 		exp_nequal_int,
@@ -94,7 +86,6 @@ var exp_and = &rql.Operator{
 
 var exp_or = &rql.Operator{
 	Kind: rql.OR,
-	Name: "or",
 	Operands: rql.ExpressionList{
 		exp_equal_int,
 		exp_nequal_int,
@@ -103,7 +94,6 @@ var exp_or = &rql.Operator{
 
 var exp_many_nested = &rql.Operator{
 	Kind: rql.AND,
-	Name: "and",
 	Operands: rql.ExpressionList{
 		exp_equal_int,
 		exp_equal_string,
@@ -115,7 +105,6 @@ var exp_many_nested = &rql.Operator{
 
 var exp_not = &rql.Operator{
 	Kind: rql.NOT,
-	Name: "not",
 	Operands: rql.ExpressionList{
 		exp_and,
 	},
@@ -123,7 +112,6 @@ var exp_not = &rql.Operator{
 
 var exp_in = &rql.Operator{
 	Kind: rql.IN,
-	Name: "in",
 	Operands: rql.ExpressionList{
 		&rql.Identifier{Kind: rql.IDENT, Name: "primes"},
 		&rql.ExpressionList{
@@ -138,7 +126,6 @@ var exp_in = &rql.Operator{
 
 var exp_null = &rql.Operator{
 	Kind: rql.EQ,
-	Name: "eq",
 	Operands: rql.ExpressionList{
 		&rql.Identifier{Kind: rql.IDENT, Name: "my_col"},
 		&rql.Literal{Kind: rql.NULL, Value: "null"},
@@ -147,7 +134,6 @@ var exp_null = &rql.Operator{
 
 var exp_quoted_string = &rql.Operator{
 	Kind: rql.EQ,
-	Name: "eq",
 	Operands: rql.ExpressionList{
 		&rql.Identifier{Kind: rql.IDENT, Name: "col"},
 		&rql.Literal{Kind: rql.STRING, Value: `"a string with "quotes" in it"`},
