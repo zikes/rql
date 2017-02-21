@@ -26,7 +26,7 @@ func Ident(s string) (Expression, error) {
 		Name: s,
 	}, nil
 }
-func Lit(i interface{}) Expression {
+func Lit(i interface{}) Literal {
 	switch i := i.(type) {
 	case int:
 		return Literal{Kind: NUMERIC, Value: strconv.Itoa(i)}
@@ -43,7 +43,7 @@ func Lit(i interface{}) Expression {
 		}
 		return Literal{Kind: BOOLEAN, Value: s}
 	default:
-		return Illegal{Kind: ILLEGAL, Value: ""}
+		return Literal{Kind: ILLEGAL, Value: fmt.Sprintf("%v", i)}
 	}
 }
 
