@@ -42,6 +42,77 @@ func TestExpression_Constructors(t *testing.T) {
 	}
 }
 
+func TestIntLiteral_Value(t *testing.T) {
+	var tests = []struct {
+		exp int
+		lit rql.Literal
+	}{
+		{0, rql.Lit(0)},
+		{1, rql.Lit(1)},
+		{-1, rql.Lit(-1)},
+	}
+
+	fmt.Printf("Testing Integer Literal Valuation\n")
+	for i, tt := range tests {
+		if tt.lit.IntValue() != tt.exp {
+			t.Errorf("  %d %q\n\nmismatch:\n    exp=%s\n    got=%s\n\n", i, tt.lit, tt.exp, tt.lit.IntValue())
+		}
+	}
+}
+
+func TestFloatLiteral_Value(t *testing.T) {
+	var tests = []struct {
+		exp float64
+		lit rql.Literal
+	}{
+		{float64(0), rql.Lit(float64(0))},
+		{1.1, rql.Lit(1.1)},
+		{-1.1, rql.Lit(-1.1)},
+	}
+
+	fmt.Printf("Testing Float Literal Valuation\n")
+	for i, tt := range tests {
+		if tt.lit.FloatValue() != tt.exp {
+			t.Errorf("  %d %q\n\nmismatch:\n    exp=%s\n    got=%s\n\n", i, tt.lit, tt.exp, tt.lit.IntValue())
+		}
+	}
+}
+
+func TestStringLiteral_Value(t *testing.T) {
+	var tests = []struct {
+		exp string
+		lit rql.Literal
+	}{
+		{"", rql.Lit("")},
+		{`""`, rql.Lit(`""`)},
+		{`this is a "test"`, rql.Lit(`this is a "test"`)},
+	}
+
+	fmt.Printf("Testing String Literal Valuation\n")
+	for i, tt := range tests {
+		if tt.lit.StringValue() != tt.exp {
+			t.Errorf("  %d %q\n\nmismatch:\n    exp=%s\n    got=%s\n\n", i, tt.lit, tt.exp, tt.lit.IntValue())
+		}
+	}
+}
+
+func TestBooleanLiteral_Value(t *testing.T) {
+	var tests = []struct {
+		exp bool
+		lit rql.Literal
+	}{
+		{true, rql.Lit(true)},
+		{false, rql.Lit(false)},
+	}
+
+	fmt.Printf("Testing Boolean Literal Valuation\n")
+	for i, tt := range tests {
+		if tt.lit.BoolValue() != tt.exp {
+			t.Errorf("  %d %q\n\nmismatch:\n    exp=%s\n    got=%s\n\n", i, tt.lit, tt.exp, tt.lit.IntValue())
+		}
+	}
+}
+
 func TestExpressions_String(t *testing.T) {
 	var tests = []struct {
 		s string
