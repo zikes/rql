@@ -140,7 +140,9 @@ func (s *Scanner) scanStringLiteral() *Literal {
 		}
 	}
 
-	return &Literal{STRING, buf.String()}
+	d := string(delim)
+
+	return &Literal{STRING, strings.Trim(strings.Replace(buf.String(), `\`+d, d, -1), d)}
 }
 func (s *Scanner) scanNumericLiteral() *Literal {
 	var buf bytes.Buffer
