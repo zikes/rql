@@ -17,14 +17,11 @@ func ParseString(s string) (Statement, error) {
 
 // Literals
 
-func Ident(s string) (Expression, error) {
-	if s == "" {
-		return nil, fmt.Errorf("Identifier must be non-empty")
-	}
+func Ident(s string) Identifier {
 	return Identifier{
 		Kind: IDENT,
 		Name: s,
-	}, nil
+	}
 }
 func Lit(i interface{}) Literal {
 	switch i := i.(type) {
