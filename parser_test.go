@@ -32,12 +32,38 @@ func TestExpression_Constructors(t *testing.T) {
 
 		// Identifiers
 		{rql.Identifier{rql.IDENT, "id"}, rql.Ident("id")},
+
+		// Arrays
+		{rql.ExpressionList{rql.Lit(1), rql.Lit(2)}, rql.Array(1, 2)},
+
+		// Operators
+		{rql.Operator{rql.AND, rql.ExpressionList{}}, rql.And()},
+		{rql.Operator{rql.AND, rql.ExpressionList{rql.Lit(true), rql.Lit(false)}}, rql.And(true, false)},
+
+		{rql.Operator{rql.OR, rql.ExpressionList{}}, rql.Or()},
+		{rql.Operator{rql.OR, rql.ExpressionList{rql.Lit(true), rql.Lit(false)}}, rql.Or(true, false)},
+		{rql.Operator{rql.NOT, rql.ExpressionList{}}, rql.Not()},
+		{rql.Operator{rql.NOT, rql.ExpressionList{rql.Lit(true), rql.Lit(false)}}, rql.Not(true, false)},
+		{rql.Operator{rql.LT, rql.ExpressionList{}}, rql.Lt()},
+		{rql.Operator{rql.LT, rql.ExpressionList{rql.Identifier{rql.IDENT, "id"}, rql.Literal{rql.NUMERIC, "12"}}}, rql.Lt(rql.Ident("id"), 12)},
+		{rql.Operator{rql.GT, rql.ExpressionList{}}, rql.Gt()},
+		{rql.Operator{rql.GT, rql.ExpressionList{rql.Identifier{rql.IDENT, "id"}, rql.Literal{rql.NUMERIC, "12"}}}, rql.Gt(rql.Ident("id"), 12)},
+		{rql.Operator{rql.LE, rql.ExpressionList{}}, rql.Le()},
+		{rql.Operator{rql.LE, rql.ExpressionList{rql.Identifier{rql.IDENT, "id"}, rql.Literal{rql.NUMERIC, "12"}}}, rql.Le(rql.Ident("id"), 12)},
+		{rql.Operator{rql.GE, rql.ExpressionList{}}, rql.Ge()},
+		{rql.Operator{rql.GE, rql.ExpressionList{rql.Identifier{rql.IDENT, "id"}, rql.Literal{rql.NUMERIC, "12"}}}, rql.Ge(rql.Ident("id"), 12)},
+		{rql.Operator{rql.EQ, rql.ExpressionList{}}, rql.Eq()},
+		{rql.Operator{rql.EQ, rql.ExpressionList{rql.Identifier{rql.IDENT, "id"}, rql.Literal{rql.NUMERIC, "12"}}}, rql.Eq(rql.Ident("id"), 12)},
+		{rql.Operator{rql.NE, rql.ExpressionList{}}, rql.Ne()},
+		{rql.Operator{rql.NE, rql.ExpressionList{rql.Identifier{rql.IDENT, "id"}, rql.Literal{rql.NUMERIC, "12"}}}, rql.Ne(rql.Ident("id"), 12)},
+		{rql.Operator{rql.IN, rql.ExpressionList{}}, rql.In()},
+		{rql.Operator{rql.IN, rql.ExpressionList{rql.Identifier{rql.IDENT, "id"}, rql.ExpressionList{rql.Literal{rql.NUMERIC, "1"}, rql.Literal{rql.NUMERIC, "2"}, rql.Literal{rql.NUMERIC, "3"}, rql.Literal{rql.NUMERIC, "4"}, rql.Literal{rql.NUMERIC, "5"}}}}, rql.In(rql.Ident("id"), rql.Array(1, 2, 3, 4, 5))},
 	}
 
 	fmt.Printf("Testing Constructors\n")
 	for i, tt := range tests {
 		if !reflect.DeepEqual(tt.exp, tt.got) {
-			t.Errorf("  %d %q\n\nmismatch:\n    exp=%s\n    got=%s\n\n", i, tt.got, tt.exp, tt.got)
+			t.Errorf("  %d %q\nmismatch:\n    exp=%s\n    got=%s\n\n", i, tt.got, tt.exp, tt.got)
 		}
 	}
 }
