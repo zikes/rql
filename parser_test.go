@@ -43,6 +43,9 @@ func TestExpressions_String(t *testing.T) {
 		{"eq()", rql.Operator{Kind: rql.EQ}},
 		{"ne()", rql.Operator{Kind: rql.NE}},
 		{"in()", rql.Operator{Kind: rql.IN}},
+
+		// Arrays
+		{"()", rql.ExpressionList{}},
 	}
 
 	fmt.Printf("Testing Expression.String()\n")
