@@ -79,6 +79,9 @@ func (l Literal) String() string {
 	if l.Kind == STRING {
 		return `"` + strings.Replace(l.Value, `"`, `\"`, -1) + `"`
 	}
+	if l.Kind == NULL {
+		return "null"
+	}
 	return l.Value
 }
 func (l Literal) Token() Token {
