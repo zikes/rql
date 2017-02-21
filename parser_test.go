@@ -119,8 +119,8 @@ func TestExpressions_String(t *testing.T) {
 		e rql.Expression
 	}{
 		// Literal Strings
-		{`""`, rql.Literal{rql.STRING, `""`}},
-		{`"test"`, rql.Literal{rql.STRING, `"test"`}},
+		{`""`, rql.Literal{rql.STRING, ``}},
+		{`"test"`, rql.Literal{rql.STRING, `test`}},
 
 		// Literal Numbers
 		{"12", rql.Literal{rql.NUMERIC, "12"}},
