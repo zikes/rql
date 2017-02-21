@@ -9,6 +9,39 @@ import (
 	"git.nwaonline.com/rune/rql"
 )
 
+func TestExpression_Constructors(t *testing.T) {
+	var tests = []struct {
+		exp rql.Expression
+		got rql.Expression
+	}{
+		// Literals
+		{rql.Literal{rql.STRING, ``}, rql.Lit("")},
+		{rql.Literal{rql.STRING, `"testing"`}, rql.Lit(`"testing"`)},
+		{rql.Literal{rql.STRING, `test "testing" test`}, rql.Lit(`test "testing" test`)},
+
+		{rql.Literal{rql.NUMERIC, "0"}, rql.Lit(0)},
+		{rql.Literal{rql.NUMERIC, "1"}, rql.Lit(1)},
+		{rql.Literal{rql.NUMERIC, "-1"}, rql.Lit(-1)},
+		{rql.Literal{rql.NUMERIC, "0.1"}, rql.Lit(0.1)},
+		{rql.Literal{rql.NUMERIC, "-0.1"}, rql.Lit(-0.1)},
+
+		{rql.Literal{rql.NULL, ""}, rql.Lit(nil)},
+
+		{rql.Literal{rql.BOOLEAN, "true"}, rql.Lit(true)},
+		{rql.Literal{rql.BOOLEAN, "false"}, rql.Lit(false)},
+
+		// Identifiers
+		{rql.Identifier{rql.IDENT, "id"}, rql.Ident("id")},
+	}
+
+	fmt.Printf("Testing Constructors\n")
+	for i, tt := range tests {
+		if !reflect.DeepEqual(tt.exp, tt.got) {
+			t.Errorf("  %d %q\n\nmismatch:\n    exp=%s\n    got=%s\n\n", i, tt.got, tt.exp, tt.got)
+		}
+	}
+}
+
 func TestExpressions_String(t *testing.T) {
 	var tests = []struct {
 		s string
