@@ -9,26 +9,40 @@ import (
 	"git.nwaonline.com/rune/rql"
 )
 
-func TestExpressions(t *testing.T) {
+func TestExpressions_String(t *testing.T) {
 	var tests = []struct {
 		s string
 		e rql.Expression
 	}{
 		// Literal Strings
-		{`""`, &rql.Literal{rql.STRING, `""`}},
-		{`"test"`, &rql.Literal{rql.STRING, `"test"`}},
+		{`""`, rql.Literal{rql.STRING, `""`}},
+		{`"test"`, rql.Literal{rql.STRING, `"test"`}},
 
 		// Literal Numbers
-		{"12", &rql.Literal{rql.NUMERIC, "12"}},
-		{"-12", &rql.Literal{rql.NUMERIC, `-12`}},
+		{"12", rql.Literal{rql.NUMERIC, "12"}},
+		{"-12", rql.Literal{rql.NUMERIC, `-12`}},
+		{"12.123", rql.Literal{rql.NUMERIC, "12.123"}},
+		{"-12.123", rql.Literal{rql.NUMERIC, `-12.123`}},
 
 		// Literal Booleans
-		{"true", &rql.Literal{rql.BOOLEAN, "true"}},
-		{"false", &rql.Literal{rql.BOOLEAN, "false"}},
+		{"true", rql.Literal{rql.BOOLEAN, "true"}},
+		{"false", rql.Literal{rql.BOOLEAN, "false"}},
 
 		// Identifiers
-		{"col", &rql.Identifier{Kind: rql.IDENT, Name: "col"}},
-		{"col_2", &rql.Identifier{Kind: rql.IDENT, Name: "col_2"}},
+		{"col", rql.Identifier{Kind: rql.IDENT, Name: "col"}},
+		{"col_2", rql.Identifier{Kind: rql.IDENT, Name: "col_2"}},
+
+		// Operators
+		{"and()", rql.Operator{Kind: rql.AND}},
+		{"or()", rql.Operator{Kind: rql.OR}},
+		{"not()", rql.Operator{Kind: rql.NOT}},
+		{"lt()", rql.Operator{Kind: rql.LT}},
+		{"gt()", rql.Operator{Kind: rql.GT}},
+		{"le()", rql.Operator{Kind: rql.LE}},
+		{"ge()", rql.Operator{Kind: rql.GE}},
+		{"eq()", rql.Operator{Kind: rql.EQ}},
+		{"ne()", rql.Operator{Kind: rql.NE}},
+		{"in()", rql.Operator{Kind: rql.IN}},
 	}
 
 	fmt.Printf("Testing Expression.String()\n")
