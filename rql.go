@@ -26,98 +26,98 @@ func Ident(s string) (Expression, error) {
 		Name: s,
 	}, nil
 }
-func Lit(i interface{}) (Expression, error) {
+func Lit(i interface{}) Expression {
 	switch i := i.(type) {
 	case int:
-		return Literal{Kind: NUMERIC, Value: strconv.Itoa(i)}, nil
+		return Literal{Kind: NUMERIC, Value: strconv.Itoa(i)}
 	case float64:
-		return Literal{Kind: NUMERIC, Value: strconv.FormatFloat(i, 'f', -1, 64)}, nil
+		return Literal{Kind: NUMERIC, Value: strconv.FormatFloat(i, 'f', -1, 64)}
 	case string:
-		return Literal{Kind: STRING, Value: i}, nil
+		return Literal{Kind: STRING, Value: i}
 	case nil:
-		return Literal{Kind: NULL, Value: "null"}, nil
+		return Literal{Kind: NULL, Value: ""}
 	case bool:
 		s := "false"
 		if i {
 			s = "true"
 		}
-		return Literal{Kind: BOOLEAN, Value: s}, nil
+		return Literal{Kind: BOOLEAN, Value: s}
 	default:
-		return nil, fmt.Errorf("unknown type")
+		return Illegal{Kind: ILLEGAL, Value: ""}
 	}
 }
 
 // Operators
 
-func And(e ...Expression) (Expression, error) {
+func And(e ...Expression) Expression {
 	return Operator{
 		Kind:     AND,
 		Operands: ExpressionList(e),
-	}, nil
+	}
 }
-func Or(e ...Expression) (Expression, error) {
+func Or(e ...Expression) Expression {
 	return Operator{
 		Kind:     OR,
 		Operands: ExpressionList(e),
-	}, nil
+	}
 }
-func Not(e ...Expression) (Expression, error) {
+func Not(e ...Expression) Expression {
 	return Operator{
 		Kind:     NOT,
 		Operands: ExpressionList(e),
-	}, nil
+	}
 }
-func Lt(e ...Expression) (Expression, error) {
+func Lt(e ...Expression) Expression {
 	return Operator{
 		Kind:     LT,
 		Operands: ExpressionList(e),
-	}, nil
+	}
 }
-func Gt(e ...Expression) (Expression, error) {
+func Gt(e ...Expression) Expression {
 	return Operator{
 		Kind:     GT,
 		Operands: ExpressionList(e),
-	}, nil
+	}
 }
-func Le(e ...Expression) (Expression, error) {
+func Le(e ...Expression) Expression {
 	return Operator{
 		Kind:     LE,
 		Operands: ExpressionList(e),
-	}, nil
+	}
 }
-func Ge(e ...Expression) (Expression, error) {
+func Ge(e ...Expression) Expression {
 	return Operator{
 		Kind:     GE,
 		Operands: ExpressionList(e),
-	}, nil
+	}
 }
-func Eq(e ...Expression) (Expression, error) {
+func Eq(e ...Expression) Expression {
 	return Operator{
 		Kind:     EQ,
 		Operands: ExpressionList(e),
-	}, nil
+	}
 }
-func Ne(e ...Expression) (Expression, error) {
+func Ne(e ...Expression) Expression {
 	return Operator{
 		Kind:     NE,
 		Operands: ExpressionList(e),
-	}, nil
+	}
 }
-func In(e ...Expression) (Expression, error) {
+func In(e ...Expression) Expression {
 	return Operator{
 		Kind:     IN,
 		Operands: ExpressionList(e),
-	}, nil
+	}
 }
 
 // Arrays
 
-func Array(e ...interface{}) (ExpressionList, error) {
+func Array(e ...interface{}) ExpressionList {
 	out := ExpressionList{}
 
 	for _, v := range e {
-		lit, err := Lit(v)
-		if err == nil {
+		lit := Lit(v)
+		if lit.Token() == ILLEGAL {
 			out = append(out, lit)
 			continue
 		}
@@ -126,8 +126,8 @@ func Array(e ...interface{}) (ExpressionList, error) {
 			out = append(out, v)
 		default:
 			// unknown type
-			return out, fmt.Errorf("Unknown type: %v", v)
+			out = append(out, lit)
 		}
 	}
-	return out, nil
+	return out
 }
