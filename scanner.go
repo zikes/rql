@@ -90,7 +90,7 @@ func (s *Scanner) scanIdentifier() Expression {
 	for {
 		if c := s.read(true); c == eof {
 			break
-		} else if !unicode.IsLetter(c) && c != '_' && !unicode.IsDigit(c) {
+		} else if !unicode.IsLetter(c) && c != '.' && c != '_' && !unicode.IsDigit(c) {
 			s.unread()
 			break
 		} else {
