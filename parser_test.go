@@ -163,6 +163,13 @@ func TestExpressions_String(t *testing.T) {
 
 		// Arrays
 		{"()", rql.ExpressionList{}},
+		{"(id)", rql.ExpressionList{
+			rql.Identifier{Kind: rql.IDENT, Name: "id"},
+		}},
+		{"(id1,id2)", rql.ExpressionList{
+			rql.Identifier{Kind: rql.IDENT, Name: "id1"},
+			rql.Identifier{Kind: rql.IDENT, Name: "id2"},
+		}},
 	}
 
 	fmt.Printf("Testing Expression.String()\n")
