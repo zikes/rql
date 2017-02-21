@@ -76,6 +76,9 @@ type Literal struct {
 
 func (Literal) exprNode() {}
 func (l Literal) String() string {
+	if l.Kind == STRING {
+		return `"` + strings.Replace(l.Value, `"`, `\"`, -1) + `"`
+	}
 	return l.Value
 }
 func (l Literal) Token() Token {
