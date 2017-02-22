@@ -58,17 +58,17 @@ func (s *Scanner) Scan() Expression {
 	case eof:
 		return Eof{}
 	case rune(tokens[COMMA][0]):
-		return &Punctuation{COMMA, tokens[COMMA]}
+		return Punctuation{COMMA, tokens[COMMA]}
 	case rune(tokens[LPAREN][0]):
-		return &Punctuation{LPAREN, tokens[LPAREN]}
+		return Punctuation{LPAREN, tokens[LPAREN]}
 	case rune(tokens[RPAREN][0]):
-		return &Punctuation{RPAREN, tokens[RPAREN]}
+		return Punctuation{RPAREN, tokens[RPAREN]}
 	}
 
-	return &Literal{ILLEGAL, string(c)}
+	return Literal{ILLEGAL, string(c)}
 }
 
-func (s *Scanner) scanWhitespace() *Whitespace {
+func (s *Scanner) scanWhitespace() Whitespace {
 	var buf bytes.Buffer
 
 	for {
@@ -82,7 +82,7 @@ func (s *Scanner) scanWhitespace() *Whitespace {
 		}
 	}
 
-	return &Whitespace{WS, buf.String()}
+	return Whitespace{WS, buf.String()}
 }
 func (s *Scanner) scanIdentifier() Expression {
 	var buf bytes.Buffer
@@ -102,20 +102,20 @@ func (s *Scanner) scanIdentifier() Expression {
 
 	opToken := LookupOperator(strings.ToLower(str))
 	if opToken > 0 {
-		return &Operator{Kind: opToken}
+		return Operator{Kind: opToken}
 	}
 
 	switch strings.ToLower(str) {
 	case "true", "false":
-		return &Literal{Kind: BOOLEAN, Value: strings.ToLower(str)}
+		return Literal{Kind: BOOLEAN, Value: strings.ToLower(str)}
 	case "null":
-		return &Literal{Kind: NULL, Value: strings.ToLower(str)}
+		return Literal{Kind: NULL, Value: strings.ToLower(str)}
 	}
 
-	return &Identifier{IDENT, str}
+	return Identifier{IDENT, str}
 }
 
-func (s *Scanner) scanStringLiteral() *Literal {
+func (s *Scanner) scanStringLiteral() Literal {
 	var buf bytes.Buffer
 	delim := s.read(false)
 	buf.WriteRune(delim)
@@ -142,9 +142,9 @@ func (s *Scanner) scanStringLiteral() *Literal {
 
 	d := string(delim)
 
-	return &Literal{STRING, strings.Trim(strings.Replace(buf.String(), `\`+d, d, -1), d)}
+	return Literal{STRING, strings.Trim(strings.Replace(buf.String(), `\`+d, d, -1), d)}
 }
-func (s *Scanner) scanNumericLiteral() *Literal {
+func (s *Scanner) scanNumericLiteral() Literal {
 	var buf bytes.Buffer
 
 	for {
@@ -158,5 +158,5 @@ func (s *Scanner) scanNumericLiteral() *Literal {
 		}
 	}
 
-	return &Literal{NUMERIC, buf.String()}
+	return Literal{NUMERIC, buf.String()}
 }
