@@ -56,7 +56,7 @@ func (s *Scanner) Scan() Expression {
 
 	switch c {
 	case eof:
-		return nil
+		return Eof{}
 	case rune(tokens[COMMA][0]):
 		return &Punctuation{COMMA, tokens[COMMA]}
 	case rune(tokens[LPAREN][0]):
