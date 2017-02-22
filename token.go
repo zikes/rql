@@ -89,7 +89,7 @@ func (tok Token) IsPunctuation() bool { return punctuation_beg < tok && tok < pu
 func (tok Token) IsArray() bool       { return array_beg < tok && tok < array_end }
 func (tok Token) IsWhitespace() bool  { return tok == WS }
 func (tok Token) IsEOF() bool         { return tok == EOF }
-func (tok Token) IsIllegal() bool     { return tok == ILLEGAL }
+func (tok Token) IsIllegal() bool     { return tok == ILLEGAL || int(tok) > len(tokens) }
 func (tok Token) IsIdentifier() bool  { return tok == IDENT }
 func (tok Token) IsValue() bool {
 	return tok.IsIdentifier() || tok.IsLiteral() || tok.IsOperator() || tok.IsArray() || tok == LPAREN
