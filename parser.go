@@ -26,8 +26,10 @@ func (p *Parser) scan() Expression {
 func (p *Parser) unscan() { p.buf.n = 1 }
 
 func (p *Parser) Parse() (Statement, error) {
-	p.skipWhitespace()
-	p.expectOperator()
+	err := p.expectOperator()
+	if err != nil {
+		return nil, err
+	}
 
 	op, err := p.getOperator()
 	if err != nil {
@@ -37,42 +39,31 @@ func (p *Parser) Parse() (Statement, error) {
 	return Statement{op}, nil
 }
 
-func (p *Parser) getOperator() (*Operator, error) {
-	for {
-		exp := p.scan()
-		if exp.Token().IsEOF() {
-			return nil, fmt.Errorf("unexpected EOF")
-		}
-		if exp.Token().IsWhitespace() {
-			continue
-		}
-		if exp.Token().IsIllegal() {
-			return nil, fmt.Errorf("unrecognized expression: %v", exp)
-		}
-		if !exp.Token().IsOperator() {
-			return nil, fmt.Errorf("found %v, expected operator", exp)
-		}
-		op, ok := exp.(*Operator)
-		if !ok {
-			return nil, fmt.Errorf("unexpected error parsing operator")
-		}
-		operands, err := p.getExpressionList()
-		if err != nil {
-			return nil, fmt.Errorf("error parsing expression list: %s", err)
-		}
-		op.Operands = *operands
-		return op, nil
+func (p *Parser) getOperator() (Operator, error) {
+	exp := p.scan()
+	if !exp.Token().IsOperator() {
+		return Operator{}, fmt.Errorf("found %v, expected operator", exp)
 	}
+	op, ok := exp.(Operator)
+	if !ok {
+		return Operator{}, fmt.Errorf("unexpected error parsing operator: %v %t", exp, exp)
+	}
+	operands, err := p.getExpressionList()
+	if err != nil {
+		return Operator{}, fmt.Errorf("error parsing expression list: %s", err)
+	}
+	op.Operands = operands
+	return op, nil
 }
 
-func (p *Parser) getExpressionList() (*ExpressionList, error) {
+func (p *Parser) getExpressionList() (ExpressionList, error) {
 	p.skipWhitespace()
 
 	if err := p.expectLParen(); err != nil {
 		return nil, err
 	}
 
-	list := &ExpressionList{}
+	list := ExpressionList{}
 
 	for {
 		if err := p.expectValueExpression(); err != nil {
@@ -82,7 +73,7 @@ func (p *Parser) getExpressionList() (*ExpressionList, error) {
 		if err != nil {
 			return nil, err
 		}
-		*list = append(*list, value)
+		list = append(list, value)
 		if err := p.expectCommaOrRParen(); err != nil {
 			return nil, err
 		}
