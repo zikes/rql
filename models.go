@@ -122,6 +122,16 @@ func (w Whitespace) Token() Token {
 	return w.Kind
 }
 
+type Eof struct{}
+
+func (Eof) exprNode() {}
+func (e Eof) String() string {
+	return "EOF"
+}
+func (e Eof) Token() Token {
+	return EOF
+}
+
 type Statement ExpressionList
 
 func (s Statement) String() string {
