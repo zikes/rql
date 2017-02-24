@@ -68,6 +68,20 @@ func TestExpression_Constructors(t *testing.T) {
 	}
 }
 
+func TestExpression_ConstructorErrors(t *testing.T) {
+	var tests = []func() rql.Literal{
+		func() rql.Literal { return rql.Lit(uint64(1)) },
+	}
+
+	fmt.Printf("Testing Constructor Errors\n")
+	for i, tt := range tests {
+		lit := tt()
+		if !lit.Token().IsIllegal() {
+			t.Errorf("%d Lit did not return Illegal", i)
+		}
+	}
+}
+
 func TestIntLiteral_Value(t *testing.T) {
 	var tests = []struct {
 		exp int
@@ -308,6 +322,14 @@ func TestParser_ParseStatement(t *testing.T) {
 			s:    `eq(col,"a string with \"quotes\" in it")`,
 			stmt: rql.Statement{exp_quoted_string},
 		},
+		{
+			s: `	`,
+			err: "found EOF, expected operator",
+		},
+		{
+			s:   `eq(12`,
+			err: "error parsing expression list: found EOF, expected comma or close parentheses",
+		},
 	}
 
 	fmt.Printf("Testing Parser\n")
@@ -329,6 +351,7 @@ func TestInvalidSyntax(t *testing.T) {
 	}{
 		{``, fmt.Errorf("found EOF, expected operator")},
 		{`and(*)`, fmt.Errorf("error parsing expression list: found *, expected value expression")},
+		{`and((*)`, fmt.Errorf("error parsing expression list: found *, expected value expression")},
 		{`or`, fmt.Errorf("error parsing expression list: found EOF, expected open parentheses")},
 		{`or)`, fmt.Errorf("error parsing expression list: found ), expected open parentheses")},
 		{`or{`, fmt.Errorf("error parsing expression list: found {, expected open parentheses")},
