@@ -41,13 +41,7 @@ func (p *Parser) Parse() (Statement, error) {
 
 func (p *Parser) getOperator() (Operator, error) {
 	exp := p.scan()
-	if !exp.Token().IsOperator() {
-		return Operator{}, fmt.Errorf("found %v, expected operator", exp)
-	}
-	op, ok := exp.(Operator)
-	if !ok {
-		return Operator{}, fmt.Errorf("unexpected error parsing operator: %v %t", exp, exp)
-	}
+	op := exp.(Operator)
 	operands, err := p.getExpressionList()
 	if err != nil {
 		return Operator{}, fmt.Errorf("error parsing expression list: %s", err)
@@ -87,9 +81,6 @@ func (p *Parser) getExpressionList() (ExpressionList, error) {
 
 func (p *Parser) getValue() (Expression, error) {
 	val := p.scan()
-	if !val.Token().IsValue() {
-		return nil, fmt.Errorf("found %v, expected value", val)
-	}
 	if val.Token() == LPAREN {
 		p.unscan()
 		return p.getExpressionList()
@@ -98,10 +89,7 @@ func (p *Parser) getValue() (Expression, error) {
 		p.unscan()
 		return p.getOperator()
 	}
-	if val.Token().IsLiteral() || val.Token().IsIdentifier() {
-		return val, nil
-	}
-	return nil, fmt.Errorf("found %v, expected value", val)
+	return val, nil
 }
 
 func (p *Parser) expectLParen() error {
