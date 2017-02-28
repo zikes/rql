@@ -142,9 +142,8 @@ func (s *StatementNode) tree() *Tree {
 func (s *StatementNode) String() string {
 	if s.Operator != nil {
 		return s.Operator.String()
-	} else {
-		return ""
 	}
+	return ""
 }
 
 // IdentifierNode holds an identifier.
