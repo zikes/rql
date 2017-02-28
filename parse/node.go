@@ -358,7 +358,7 @@ type OperatorNode struct {
 }
 
 func (t *Tree) newOperator(op string, pos Pos, list *ListNode) *OperatorNode {
-	return &OperatorNode{tr: t, Operator: op, Pos: pos, Operands: list}
+	return &OperatorNode{NodeType: NodeOperator, tr: t, Operator: op, Pos: pos, Operands: list}
 }
 
 // String returns the string representation of the OperatorNode
