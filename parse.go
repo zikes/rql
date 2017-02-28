@@ -2,7 +2,6 @@ package rql
 
 import (
 	"fmt"
-	"runtime"
 	"strconv"
 	"strings"
 )
@@ -167,9 +166,6 @@ func (t *Tree) unexpected(token item, context string) {
 func (t *Tree) recover(errp *error) {
 	e := recover()
 	if e != nil {
-		if _, ok := e.(runtime.Error); ok {
-			panic(e)
-		}
 		if t != nil {
 			t.lex.drain()
 			t.stopParse()
