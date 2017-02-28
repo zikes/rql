@@ -208,6 +208,20 @@ func IsEmptyTree(n Node) bool {
 				return false
 			}
 		}
+	case *IdentifierNode:
+		return n.Ident == ""
+	case *NullNode:
+	case *BoolNode:
+	case *NumberNode:
+	case *StringNode:
+		return false
+	case *OperatorNode:
+		return IsEmptyTree(n.Operands)
+	case *StatementNode:
+		if n.Operator == nil {
+			return true
+		}
+		return IsEmptyTree(n.Operator.Operands)
 	default:
 		panic("unknown node: " + n.String())
 	}
