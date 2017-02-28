@@ -36,6 +36,7 @@ type NodeType int
 // this statement was parsed
 type Pos int
 
+// Position returns itself
 func (p Pos) Position() Pos {
 	return p
 }
@@ -46,6 +47,7 @@ func (t NodeType) Type() NodeType {
 	return t
 }
 
+// NodeType constants
 const (
 	NodeBool       NodeType = iota // A boolean constant.
 	NodeIdentifier                 // An identifier
@@ -77,6 +79,7 @@ func (l *ListNode) tree() *Tree {
 	return l.tr
 }
 
+// String returns the ListNode as a string
 func (l *ListNode) String() string {
 	b := new(bytes.Buffer)
 	for i, n := range l.Nodes {
@@ -88,6 +91,7 @@ func (l *ListNode) String() string {
 	return "(" + b.String() + ")"
 }
 
+// CopyList will copy and return *ListNode
 func (l *ListNode) CopyList() *ListNode {
 	if l == nil {
 		return l
@@ -99,6 +103,7 @@ func (l *ListNode) CopyList() *ListNode {
 	return n
 }
 
+// Copy runs CopyList but returns as Node
 func (l *ListNode) Copy() Node {
 	return l.CopyList()
 }
@@ -120,16 +125,20 @@ func (t *Tree) newStatement(pos Pos, op *OperatorNode) *StatementNode {
 	}
 }
 
+// CopyStatement returns a copy of the StatementNode as a *StatementNode
 func (s *StatementNode) CopyStatement() *StatementNode {
 	return s.tr.newStatement(s.Pos, s.Operator)
 }
 
+// Copy runs CopyStatement, returning as a Node
 func (s *StatementNode) Copy() Node {
 	return s.CopyStatement()
 }
 func (s *StatementNode) tree() *Tree {
 	return s.tr
 }
+
+// String returns the StatementNode as a string
 func (s *StatementNode) String() string {
 	if s.Operator != nil {
 		return s.Operator.String()
@@ -146,6 +155,7 @@ type IdentifierNode struct {
 	Ident string // The identifier's name.
 }
 
+// NewIdentifier creates an IdentifierNode
 func NewIdentifier(ident string) *IdentifierNode {
 	return &IdentifierNode{NodeType: NodeIdentifier, Ident: ident}
 }
@@ -170,6 +180,7 @@ func (i *IdentifierNode) tree() *Tree {
 	return i.tr
 }
 
+// Copy copies the IdentifierNode
 func (i *IdentifierNode) Copy() Node {
 	return NewIdentifier(i.Ident).SetTree(i.tr).SetPos(i.Pos)
 }
@@ -185,10 +196,12 @@ func (t *Tree) newNull(pos Pos) *NullNode {
 	return &NullNode{tr: t, NodeType: NodeNull, Pos: pos}
 }
 
+// Type returns the NodeType value
 func (n *NullNode) Type() NodeType {
 	return NodeNull
 }
 
+// String returns the string representation of NullNode
 func (n *NullNode) String() string {
 	return "null"
 }
@@ -197,6 +210,7 @@ func (n *NullNode) tree() *Tree {
 	return n.tr
 }
 
+// Copy returns a copy of the NullNode
 func (n *NullNode) Copy() Node {
 	return n.tr.newNull(n.Pos)
 }
@@ -213,6 +227,7 @@ func (t *Tree) newBool(pos Pos, true bool) *BoolNode {
 	return &BoolNode{tr: t, NodeType: NodeBool, Pos: pos, True: true}
 }
 
+// String returns a string representation of the BoolNode
 func (b *BoolNode) String() string {
 	if b.True {
 		return "true"
@@ -224,6 +239,7 @@ func (b *BoolNode) tree() *Tree {
 	return b.tr
 }
 
+// Copy returns a copy of the BoolNode
 func (b *BoolNode) Copy() Node {
 	return b.tr.newBool(b.Pos, b.True)
 }
@@ -290,6 +306,7 @@ func (t *Tree) newNumber(pos Pos, text string) (*NumberNode, error) {
 	return n, nil
 }
 
+// String returns a string representation of the NumberNode
 func (n *NumberNode) String() string {
 	return n.Text
 }
@@ -298,6 +315,7 @@ func (n *NumberNode) tree() *Tree {
 	return n.tr
 }
 
+// Copy returns a copy of the NumberNode
 func (n *NumberNode) Copy() Node {
 	nn := new(NumberNode)
 	*nn = *n
@@ -317,6 +335,7 @@ func (t *Tree) newString(pos Pos, orig, text string) *StringNode {
 	return &StringNode{tr: t, NodeType: NodeString, Pos: pos, Quoted: orig, Text: text}
 }
 
+// String returns the original quoted version of the StringNode
 func (s *StringNode) String() string {
 	return s.Quoted
 }
@@ -325,6 +344,7 @@ func (s *StringNode) tree() *Tree {
 	return s.tr
 }
 
+// Copy returns a copy of the StringNode
 func (s *StringNode) Copy() Node {
 	return s.tr.newString(s.Pos, s.Quoted, s.Text)
 }
@@ -342,6 +362,7 @@ func (t *Tree) newOperator(op string, pos Pos, list *ListNode) *OperatorNode {
 	return &OperatorNode{tr: t, Operator: op, Pos: pos, Operands: list}
 }
 
+// String returns the string representation of the OperatorNode
 func (o *OperatorNode) String() string {
 	return fmt.Sprintf("%s%s", o.Operator, o.Operands)
 }
@@ -350,6 +371,7 @@ func (o *OperatorNode) tree() *Tree {
 	return o.tr
 }
 
+// Copy returns a copy of the OperatorNode
 func (o *OperatorNode) Copy() Node {
 	return o.tr.newOperator(o.Operator, o.Pos, o.Operands.CopyList())
 }
