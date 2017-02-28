@@ -244,13 +244,8 @@ func (t *Tree) parse() {
 
 // operator returns an operator
 func (t *Tree) operator() *OperatorNode {
-	switch token := t.expectOneOf(operators, "operator"); {
-	case itemOperatorsStart <= token.typ && token.typ <= itemOperatorsEnd:
-		return t.newOperator(token.val, token.pos, t.list())
-	default:
-		t.unexpected(token, "input")
-	}
-	return nil
+	token := t.expectOneOf(operators, "operator")
+	return t.newOperator(token.val, token.pos, t.list())
 }
 
 func (t *Tree) list() *ListNode {
