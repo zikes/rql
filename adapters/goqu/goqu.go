@@ -16,6 +16,40 @@ func ToGoqu(n rql.Node) goqu.Expression {
 		switch n.Operator {
 		case "eq":
 			return goqu.I(left.(*rql.IdentifierNode).Ident).Eq(value(right))
+		case "ne":
+			return goqu.I(left.(*rql.IdentifierNode).Ident).Neq(value(right))
+		case "lt":
+			return goqu.I(left.(*rql.IdentifierNode).Ident).Lt(value(right))
+		case "gt":
+			return goqu.I(left.(*rql.IdentifierNode).Ident).Gt(value(right))
+		case "le":
+			return goqu.I(left.(*rql.IdentifierNode).Ident).Lte(value(right))
+		case "ge":
+			return goqu.I(left.(*rql.IdentifierNode).Ident).Gte(value(right))
+		case "in":
+			values := []interface{}{}
+			for _, v := range n.Operands.Nodes[1:] {
+				values = append(values, value(v))
+			}
+			return goqu.I(left.(*rql.IdentifierNode).Ident).In(values)
+		case "or":
+			exOr, err := goqu.ExOr{}.ToExpressions()
+			if err != nil {
+				panic(err)
+			}
+			for _, v := range n.Operands.Nodes {
+				exOr = exOr.Append(ToGoqu(v))
+			}
+			return exOr
+		case "and":
+			ex, err := goqu.Ex{}.ToExpressions()
+			if err != nil {
+				panic(err)
+			}
+			for _, v := range n.Operands.Nodes {
+				ex = ex.Append(ToGoqu(v))
+			}
+			return ex
 		}
 	}
 	return goqu.Ex{}
