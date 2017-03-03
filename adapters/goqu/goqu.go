@@ -1,6 +1,8 @@
 package goquadapter
 
 import (
+	"reflect"
+
 	rql "git.nwaonline.com/rune/rql/parse"
 	"gopkg.in/DATA-DOG/go-sqlmock.v1"
 	"gopkg.in/doug-martin/goqu.v3"
@@ -11,6 +13,9 @@ func ToGoqu(n rql.Node) goqu.Expression {
 	case *rql.StatementNode:
 		return ToGoqu(n.Operator)
 	case *rql.OperatorNode:
+		if n == nil || len(n.Operands.Nodes) == 0 {
+			return goqu.Ex{}
+		}
 		left := n.Operands.Nodes[0]
 		right := n.Operands.Nodes[1]
 		switch n.Operator {
@@ -59,6 +64,10 @@ func ToSQL(n rql.Node) string {
 	driver, _, _ := sqlmock.New()
 	db := goqu.New("default", driver)
 	e := ToGoqu(n)
+	if reflect.DeepEqual(e, goqu.Ex{}) {
+		sql, _, _ := db.From("test").ToSql()
+		return sql
+	}
 	sql, _, _ := db.From("test").Where(e).ToSql()
 	return sql
 }
