@@ -26,6 +26,10 @@ var parseTests = []parseTest{
 	{"and", "and(eq(id,12),lt(age,21))", `SELECT * FROM "test" WHERE (("id" = 12) AND ("age" < 21))`},
 	{"or", "or(eq(id,12),lt(age,21))", `SELECT * FROM "test" WHERE (("id" = 12) OR ("age" < 21))`},
 	{"in", "in(id,(12,13,14))", `SELECT * FROM "test" WHERE ("id" IN ((12, 13, 14)))`},
+
+	{"null", "eq(id,null)", `SELECT * FROM "test" WHERE ("id" IS NULL)`},
+	{"bool", "eq(id,true)", `SELECT * FROM "test" WHERE ("id" IS TRUE)`},
+	{"string", `eq(id,"test")`, `SELECT * FROM "test" WHERE ("id" = 'test')`},
 }
 
 func TestParse(t *testing.T) {
