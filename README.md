@@ -46,3 +46,26 @@ In SQL, the above would be
 | name           | usage                 | description                                                    |
 |----------------|-----------------------|----------------------------------------------------------------|
 | ExpressionList | `(val,val,val,[...])` | Collects a list of values and presents them as a single value. |
+
+## Parser
+
+```go
+import (
+  "fmt"
+
+  goquadapter "git.nwaonline.com/rune/rql/adapters/goqu"
+  rql "git.nwaonline.com/rune/rql/parse"
+)
+
+func main() {
+  rqlString := `eq(id,12)`
+  ast, err := rql.New("root").Parse(rqlString)
+  if err != nil {
+    fmt.Printf("Error parsing RQL: %s", err)
+    return
+  }
+
+  ex := goquadapter.ToGoqu(ast)
+  fmt.Printf("%+v", ex)
+}
+```
