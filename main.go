@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	goquadapter "git.nwaonline.com/rune/rql/adapters/goqu"
-	sqladapter "git.nwaonline.com/rune/rql/adapters/sql"
-	rql "git.nwaonline.com/rune/rql/parse"
 	"github.com/spf13/cobra"
+	goquadapter "github.com/zikes/rql/adapters/goqu"
+	sqladapter "github.com/zikes/rql/adapters/sql"
+	rql "github.com/zikes/rql/parse"
 )
 
 func main() {

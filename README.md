@@ -53,8 +53,8 @@ In SQL, the above would be
 import (
   "fmt"
 
-  goquadapter "git.nwaonline.com/rune/rql/adapters/goqu"
-  rql "git.nwaonline.com/rune/rql/parse"
+  goquadapter "github.com/zikes/rql/adapters/goqu"
+  rql "github.com/zikes/rql/parse"
 )
 
 func main() {

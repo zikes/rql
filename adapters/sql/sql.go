@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"git.nwaonline.com/rune/rql/parse"
+	rql "github.com/zikes/rql/parse"
 )
 
 func ToSQL(n rql.Node) string {

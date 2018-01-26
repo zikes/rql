@@ -3,7 +3,7 @@ package goquadapter
 import (
 	"reflect"
 
-	rql "git.nwaonline.com/rune/rql/parse"
+	rql "github.com/zikes/rql/parse"
 	"gopkg.in/DATA-DOG/go-sqlmock.v1"
 	"gopkg.in/doug-martin/goqu.v3"
 )

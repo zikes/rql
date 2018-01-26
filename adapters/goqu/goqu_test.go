@@ -3,7 +3,7 @@ package goquadapter
 import (
 	"testing"
 
-	rql "git.nwaonline.com/rune/rql/parse"
+	rql "github.com/zikes/rql/parse"
 )
 
 type parseTest struct {

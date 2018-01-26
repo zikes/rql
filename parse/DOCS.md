@@ -1,6 +1,6 @@
 # rql
 --
-    import "git.nwaonline.com/rune/rql"
+    import "github.com/zikes/rql"
 
 
 ## Usage
